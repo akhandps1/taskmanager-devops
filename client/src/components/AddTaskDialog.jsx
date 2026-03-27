@@ -23,7 +23,7 @@ const AddTaskDialog = ({ onClose, onSubmit }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic validation
+    // Basic validation add
     if (!formData.title.trim() || !formData.description.trim()) {
       setError('Both title and description are required');
       return;
