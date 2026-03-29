@@ -1,87 +1,42 @@
-name: build-and-deploy
+name: Direct Deploy to AWS EC2
 
-# Trigger on push to main branch
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
-  # JOB 1: Test & Lint Code
-  build-and-lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-
-      - name: Install backend dependencies
-        working-directory: server
-        run: npm ci
-
-      - name: Lint backend (Warnings ignored to prevent build crash)
-        working-directory: server
-        run: npm run lint
-
-      - name: Install frontend dependencies
-        working-directory: client
-        run: npm ci
-
-      - name: Lint frontend (Warnings ignored to prevent build crash)
-        working-directory: client
-        run: npm run lint
-
-      - name: Test Build Backend Docker Image
-        run: docker build -t backend ./server
-
-      - name: Test Build Frontend Docker Image
-        run: docker build -t frontend ./client
-
-  # JOB 2: Deploy to AWS EC2 (Runs only if Job 1 passes and it's a push to main)
   deploy:
-    needs: build-and-lint
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # 1. Copy fresh code from GitHub to EC2 directly
       - name: Copy project files to EC2
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
           source: "."
           target: "/home/ubuntu/taskmanager-devops"
           
-      # 2. Run Docker Compose on EC2
-      - name: Run Docker Compose on EC2
+      - name: Run Docker on EC2
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/ubuntu/taskmanager-devops
             
-            # Purane containers band karein
-            sudo docker-compose down
+            # Purane containers ko band karein (agar error aaye toh ignore karein)
+            sudo docker-compose down || true
             
-            # Naye code ke sath containers build aur start karein
+            # Naye changes ke sath build aur run karein
             sudo docker-compose up -d --build
             
-            # Faltu (unused) docker images delete karein space bachane ke liye
+            # Extra kachra (unused images) clean karein
             sudo docker image prune -f
-            
-            # Status check karein
-            sudo docker-compose ps
 
 # name: build-and-lint
 

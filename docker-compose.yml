@@ -13,10 +13,32 @@ services:
     build:
       context: ./client
       args:
-        VITE_API_URL: http://44.204.152.93:5000/api
+        # ⚠️ YAHAN APNA NAYA AWS EC2 PUBLIC IP DAALEIN (e.g., http://54.123.45.67:5000/api)
+        VITE_API_URL: http://44.201.158.38:5000/api
     container_name: frontend
     restart: always
     ports:
       - "5173:5173"
     depends_on:
       - backend
+# services:
+#   backend:
+#     build: ./server
+#     container_name: backend
+#     restart: always
+#     env_file:
+#       - ./server/.env        
+#     ports:
+#       - "5000:5000"
+
+#   frontend:
+#     build:
+#       context: ./client
+#       args:
+#         VITE_API_URL: http://44.204.152.93:5000/api
+#     container_name: frontend
+#     restart: always
+#     ports:
+#       - "5173:5173"
+#     depends_on:
+#       - backend
