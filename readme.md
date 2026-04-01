@@ -12,8 +12,6 @@ A full-stack task management application built with the MERN stack (React + Node
 
 ## 📸 Screenshots
 
-*(Replace the placeholder image link below with your actual screenshot)*
-
 ![Task Manager Dashboard](./screenshots/app-screenshot.png)
 
 ---
@@ -170,10 +168,4 @@ To enable the automated deployment, add the following secrets to your GitHub Rep
     
 4. SSH executes `docker-compose down`, rebuilds the images with `docker-compose up -d --build`, and prunes old images.
     
-
 ---
-
-## 📜 License
-
-This project is licensed under the MIT License.
-// update
