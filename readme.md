@@ -6,13 +6,9 @@ A full-stack task management application built with the MERN stack (React + Node
 
 ## 🌐 Live Demo
 
-**Check out the live application here:** 👉 **[Click here to view the Live App](http://<YOUR_EC2_PUBLIC_IP>:5173)** *(Note: Ensure your AWS EC2 instance is running and inbound rules allow traffic on port 5173).*
+**Check out the live application here:** 👉 **[Click here to view the Live App](http://44.201.158.38:5173)** *(Note: Ensure your AWS EC2 instance is running and inbound rules allow traffic on port 5173).*
 
----
 
-## 📸 Screenshots
-
-![Task Manager Dashboard](./screenshots/app-screenshot.png)
 
 ---
 
